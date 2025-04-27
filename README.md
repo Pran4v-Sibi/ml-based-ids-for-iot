@@ -1,4 +1,3 @@
-```markdown
 # IoT Intrusion Detection System (IDS) using Machine Learning 🚀
 
 This project implements a **Machine Learning-based Intrusion Detection System (IDS)** specifically designed for **IoT networks**. The model is built, containerized using Docker, and deployed to the cloud using Render.com for public access.
@@ -43,11 +42,11 @@ All `/predict` requests require an **Authorization token** to be passed in the h
 
 **Example Header:**
 
-```plaintext
+```
 Authorization: YOUR_API_TOKEN
 
 ⚠️ Note: The API token is not shared publicly in this repository for security reasons.
-Please contact the project owner if you require access for academic or demonstration purposes.
+If you require access for academic or demonstration purposes, please contact the project owner.
 
 Requests without a valid token will result in 401 Unauthorized errors.
 
@@ -89,7 +88,6 @@ Requests without a valid token will result in 401 Unauthorized errors.
   "Avg Packet Size": 45,
   "Avg Fwd Segment Size": 22,
   "Avg Bwd Segment Size": 25
-'''
 }
 
 
@@ -99,7 +97,7 @@ You can access the live deployed API here:
 
 🚀 Live URL: https://iot-ids-api.onrender.com/
 
-(Note: Authentication token is required for POST requests.)
+(Note: Authentication token required for POST requests.)
 
 🧠 Future Improvements
 
