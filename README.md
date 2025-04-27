@@ -89,7 +89,7 @@ Requests without a valid token will result in 401 Unauthorized errors.
   "Avg Fwd Segment Size": 22,
   "Avg Bwd Segment Size": 25
 }
-
+```
 
 🌍 Live API
 
