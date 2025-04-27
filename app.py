@@ -1,5 +1,6 @@
 import joblib
 import pandas as pd
+import os
 from flask import Flask, request, jsonify
 
 app = Flask(__name__)
@@ -30,8 +31,9 @@ full_model_features = [
     "Active Min", "Idle Mean", "Idle Std", "Idle Max", "Idle Min"
 ]
 
-# Simple Token for security
-API_TOKEN = "pranavsibi9192"
+# Token
+API_TOKEN = os.getenv("API_TOKEN")
+
 
 def rebuild_full_features(input_data):
     input_df = pd.DataFrame([input_data])
