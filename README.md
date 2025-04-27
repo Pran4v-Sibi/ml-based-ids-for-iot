@@ -90,15 +90,15 @@ Requests without the correct token will receive a 401 Unauthorized response.
   "Avg Bwd Segment Size": 25
 }
 
-🌍 Live API
+## 🌍 Live API
 
 You can access the live deployed API here:
 
-🚀 Live URL: https://iot-ids-api.onrender.com
+## 🚀 Live URL: https://iot-ids-api.onrender.com
 
 (Note: Authentication token required for POST requests.)
 
-🧠 Future Improvements
+## 🧠 Future Improvements
 
 Secure token management using environment variables.
 
@@ -108,6 +108,6 @@ Expand the model for multi-class classification (different types of attacks).
 
 Set up logging and monitoring using cloud services.
 
-📜 License
+## 📜 License
 
 This project is for educational purposes and research only.
