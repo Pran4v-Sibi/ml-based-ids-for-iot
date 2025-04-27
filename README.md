@@ -46,9 +46,9 @@ All `/predict` requests require an **Authorization token** to be passed in the h
 Authorization: YOUR_API_TOKEN
 
 ⚠️ Note: The API token is not shared publicly in this repository for security reasons.
-If you require access for academic or demonstration purposes, please contact the project owner.
+Please contact the project owner if you require access for academic or demonstration purposes.
 
-Requests without the correct token will receive a 401 Unauthorized response.
+Requests without a valid token will result in 401 Unauthorized errors.
 
 📦 Input JSON Example
 
@@ -90,15 +90,15 @@ Requests without the correct token will receive a 401 Unauthorized response.
   "Avg Bwd Segment Size": 25
 }
 
-## 🌍 Live API
+🌍 Live API
 
 You can access the live deployed API here:
 
-## 🚀 Live URL: https://iot-ids-api.onrender.com
+🚀 Live URL: https://iot-ids-api.onrender.com/
 
-(Note: Authentication token required for POST requests.)
+(Note: Authentication token is required for POST requests.)
 
-## 🧠 Future Improvements
+🧠 Future Improvements
 
 Secure token management using environment variables.
 
@@ -108,6 +108,6 @@ Expand the model for multi-class classification (different types of attacks).
 
 Set up logging and monitoring using cloud services.
 
-## 📜 License
+📜 License
 
 This project is for educational purposes and research only.
