@@ -109,9 +109,5 @@ def dashboard():
 
     return render_template('dashboard.html', feed=intrusion_feed)
 
-@app.route('/test-template')
-def test_template():
-    return render_template('test.html')
-
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=10000)
