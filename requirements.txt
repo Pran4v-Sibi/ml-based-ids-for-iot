@@ -2,3 +2,11 @@ flask
 pandas
 scikit-learn
 joblib
+numpy
+gunicorn
+flask-cors
+plotly
+dash
+matplotlib
+requests
+python-dotenv
