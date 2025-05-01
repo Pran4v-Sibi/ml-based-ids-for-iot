@@ -2,6 +2,9 @@ import joblib
 import pandas as pd
 import os
 from flask import Flask, request, jsonify
+import random
+from flask import render_template
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -50,10 +53,12 @@ def rebuild_full_features(input_data):
 
 @app.route('/')
 def home():
-    return jsonify({
-        "message": "🚀 IoT IDS Random Forest Model API is live!",
-        "status": "success"
-    })
+    return '''
+    <h2>🚀 IoT IDS API is Live!</h2>
+    <p>This is the home page of the deployed IDS project.</p>
+    <p><strong>POST</strong> /predict – Use this endpoint to send intrusion data (via Postman or frontend code).</p>
+    <p><a href="/dashboard">📊 View Live Intrusion Dashboard</a></p>
+    '''
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -85,6 +90,24 @@ def predict():
             "error": f"Internal Server Error: {str(e)}",
             "status": "error"
         }), 500
+
+# Simulated prediction feed
+intrusion_feed = []
+
+@app.route('/dashboard')
+def dashboard():
+    # Simulate a new prediction (0 or 1)
+    prediction = random.choice([0, 1])
+    time = datetime.now().strftime("%H:%M:%S")
+
+    # Add to the feed list
+    intrusion_feed.insert(0, {"time": time, "prediction": prediction})
+
+    # Limit to last 10 predictions
+    if len(intrusion_feed) > 10:
+        intrusion_feed.pop()
+
+    return render_template('dashboard.html', feed=intrusion_feed)
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000)
