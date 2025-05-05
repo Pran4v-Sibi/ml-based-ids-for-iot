@@ -78,10 +78,24 @@ def predict():
 
         processed_data = rebuild_full_features(input_json)
 
-        prediction = model.predict(processed_data)
+        # Prediction + Confidence
+        proba = model.predict_proba(processed_data)
+        prediction = int(proba.argmax(axis=1)[0])
+        confidence = float(proba.max())
+
+        # Add to live feed (for dashboard)
+        time = datetime.now().strftime("%H:%M:%S")
+        intrusion_feed.insert(0, {
+            "time": time,
+            "prediction": prediction,
+            "confidence": confidence
+        })
+        if len(intrusion_feed) > 10:
+            intrusion_feed.pop()
 
         return jsonify({
-            "prediction": int(prediction[0]),
+            "prediction": prediction,
+            "confidence": round(confidence, 4),
             "status": "success"
         })
 
@@ -90,6 +104,7 @@ def predict():
             "error": f"Internal Server Error: {str(e)}",
             "status": "error"
         }), 500
+
 
 # Simulated prediction feed
 intrusion_feed = []
