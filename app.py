@@ -65,7 +65,6 @@ def predict():
     try:
         input_json = request.get_json()
 
-        # NEW: Check for Authorization Header
         token = request.headers.get('Authorization')
         if not token or token != API_TOKEN:
             return jsonify({
@@ -78,24 +77,13 @@ def predict():
 
         processed_data = rebuild_full_features(input_json)
 
-        # Prediction + Confidence
-        proba = model.predict_proba(processed_data)
-        prediction = int(proba.argmax(axis=1)[0])
-        confidence = float(proba.max())
-
-        # Add to live feed (for dashboard)
-        time = datetime.now().strftime("%H:%M:%S")
-        intrusion_feed.insert(0, {
-            "time": time,
-            "prediction": prediction,
-            "confidence": confidence
-        })
-        if len(intrusion_feed) > 10:
-            intrusion_feed.pop()
+        prediction = model.predict(processed_data)[0]
+        proba = model.predict_proba(processed_data)[0]
+        confidence = max(proba)
 
         return jsonify({
-            "prediction": prediction,
-            "confidence": round(confidence, 4),
+            "prediction": int(prediction),
+            "confidence": round(float(confidence), 4),
             "status": "success"
         })
 
@@ -111,18 +99,21 @@ intrusion_feed = []
 
 @app.route('/dashboard')
 def dashboard():
-    # Simulate a new prediction (0 or 1)
     prediction = random.choice([0, 1])
+    confidence = round(random.uniform(0.6, 0.99), 2)
     time = datetime.now().strftime("%H:%M:%S")
 
-    # Add to the feed list
-    intrusion_feed.insert(0, {"time": time, "prediction": prediction})
+    intrusion_feed.insert(0, {
+        "time": time,
+        "prediction": prediction,
+        "confidence": confidence
+    })
 
-    # Limit to last 10 predictions
     if len(intrusion_feed) > 10:
         intrusion_feed.pop()
 
     return render_template('dashboard.html', feed=intrusion_feed)
+
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=10000)

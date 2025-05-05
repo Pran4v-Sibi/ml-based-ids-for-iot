@@ -1,16 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
     <title>Live Intrusion Feed</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            padding: 40px;
-            background-color: #f4f4f4;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 30px;
+            background-color: #f2f2f2;
         }
 
-        h1 {
+        h2 {
+            text-align: center;
             color: #333;
         }
 
@@ -18,49 +17,83 @@
             width: 100%;
             border-collapse: collapse;
             background: #fff;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            margin-top: 30px;
+            border-radius: 10px;
+            overflow: hidden;
         }
 
         th, td {
-            padding: 12px;
+            padding: 14px;
             text-align: center;
+            border-bottom: 1px solid #eee;
         }
 
         th {
-            background-color: #333;
+            background-color: #007bff;
             color: white;
         }
 
-        tr.safe {
+        .safe {
             background-color: #d4edda;
             color: #155724;
+            font-weight: bold;
         }
 
-        tr.intrusion {
+        .danger {
             background-color: #f8d7da;
             color: #721c24;
+            font-weight: bold;
+        }
+
+        .bar-container {
+            width: 100%;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+        }
+
+        .bar-fill {
+            height: 20px;
+            border-radius: 5px;
+            color: white;
+            text-align: center;
+            line-height: 20px;
+            font-size: 13px;
+        }
+
+        .icon {
+            font-size: 18px;
+            margin-right: 5px;
         }
     </style>
+    <meta http-equiv="refresh" content="05">
 </head>
 <body>
-    <h1>📡 Live Intrusion Detection Feed</h1>
+    <h2>📊 Real-Time Intrusion Detection Dashboard</h2>
     <table>
-        <thead>
-            <tr>
-                <th>Time</th>
-                <th>Status</th>
-                <th>Confidence</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for entry in feed %}
-            <tr class="{{ 'intrusion' if entry.prediction == 1 else 'safe' }}">
-                <td>{{ entry.time }}</td>
-                <td>{{ 'Intrusion 🚨' if entry.prediction == 1 else 'Normal ✅' }}</td>
-                <td>{{ (entry.confidence * 100) | round(2) }}%</td>
-            </tr>
-            {% endfor %}
-        </tbody>
+        <tr>
+            <th>Time</th>
+            <th>Status</th>
+            <th>Confidence</th>
+        </tr>
+        {% for entry in feed %}
+        <tr>
+            <td>{{ entry.time }}</td>
+            <td class="{{ 'danger' if entry.prediction == 1 else 'safe' }}">
+                <span class="icon">{{ '🔴' if entry.prediction == 1 else '✅' }}</span>
+                {{ 'INTRUSION' if entry.prediction == 1 else 'NORMAL' }}
+            </td>
+            <td>
+                <div class="bar-container">
+                    <div class="bar-fill"
+                         style="width: {{ (entry.confidence * 100)|round(0) }}%;
+                                background-color: {{ '#dc3545' if entry.prediction == 1 else '#28a745' }}">
+                        {{ (entry.confidence * 100)|round(1) }}%
+                    </div>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
     </table>
 </body>
 </html>
