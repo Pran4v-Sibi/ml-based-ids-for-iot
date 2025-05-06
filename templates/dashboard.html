@@ -99,16 +99,23 @@
 <h3>Confidence Over Time</h3>
 <canvas id="confidenceChart"></canvas>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     const ctx = document.getElementById('confidenceChart').getContext('2d');
     const chart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: {{ feed | map(attribute='time') | list }},
+            labels: [
+                {% for entry in feed %}
+                    "{{ entry.time }}"{% if not loop.last %}, {% endif %}
+                {% endfor %}
+            ],
             datasets: [{
                 label: 'Prediction Confidence (%)',
-                data: {{ feed | map(attribute='confidence') | map('float') | map('multiply', 100) | list }},
+                data: [
+                    {% for entry in feed %}
+                        {{ (entry.confidence * 100) | round(1) }}{% if not loop.last %}, {% endif %}
+                    {% endfor %}
+                ],
                 borderColor: 'blue',
                 tension: 0.2,
             }]
