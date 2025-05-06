@@ -81,8 +81,12 @@ def predict():
         proba = model.predict_proba(processed_data)[0]
         confidence = max(proba)
 
+        # Add label
+        label = "ATTACK" if prediction == 1 else "BENIGN"
+
         return jsonify({
             "prediction": int(prediction),
+            "label": label,
             "confidence": round(float(confidence), 4),
             "status": "success"
         })
@@ -107,6 +111,7 @@ def dashboard():
         "time": time,
         "prediction": prediction,
         "confidence": confidence
+        "label": "ATTACK" if prediction == 1 else "BENIGN"
     })
 
     if len(intrusion_feed) > 10:

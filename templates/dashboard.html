@@ -81,7 +81,7 @@
             <td>{{ entry.time }}</td>
             <td class="{{ 'danger' if entry.prediction == 1 else 'safe' }}">
                 <span class="icon">{{ '🔴' if entry.prediction == 1 else '✅' }}</span>
-                {{ 'INTRUSION' if entry.prediction == 1 else 'NORMAL' }}
+                {{ entry.label }}
             </td>
             <td>
                 <div class="bar-container">
@@ -96,4 +96,23 @@
         {% endfor %}
     </table>
 </body>
+<h3>Confidence Over Time</h3>
+<canvas id="confidenceChart"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('confidenceChart').getContext('2d');
+    const chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: {{ feed | map(attribute='time') | list }},
+            datasets: [{
+                label: 'Prediction Confidence (%)',
+                data: {{ feed | map(attribute='confidence') | map('float') | map('multiply', 100) | list }},
+                borderColor: 'blue',
+                tension: 0.2,
+            }]
+        },
+    });
+</script>
 </html>
