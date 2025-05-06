@@ -110,7 +110,7 @@ def dashboard():
     intrusion_feed.insert(0, {
         "time": time,
         "prediction": prediction,
-        "confidence": confidence
+        "confidence": confidence,
         "label": "ATTACK" if prediction == 1 else "BENIGN"
     })
 
