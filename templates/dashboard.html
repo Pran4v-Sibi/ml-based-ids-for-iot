@@ -1,6 +1,10 @@
 <html>
 <head>
     <title>Live Intrusion Feed</title>
+
+    <!-- ✅ Chart.js CDN to render the graph -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -65,6 +69,14 @@
             font-size: 18px;
             margin-right: 5px;
         }
+
+        canvas {
+            margin-top: 40px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
     </style>
     <meta http-equiv="refresh" content="05">
 </head>
@@ -87,7 +99,7 @@
                 <div class="bar-container">
                     <div class="bar-fill"
                          style="width: {{ (entry.confidence * 100)|round(0) }}%;
-                                background-color: {{ '#dc3545' if entry.prediction == 1 else '#28a745' }}">
+                                background-color: {{ '#dc3545' if entry.prediction == 1 else '#28a745' }};">
                         {{ (entry.confidence * 100)|round(1) }}%
                     </div>
                 </div>
@@ -95,60 +107,62 @@
         </tr>
         {% endfor %}
     </table>
-</body>
-<h3>Confidence Over Time</h3>
-<canvas id="confidenceChart"></canvas>
-<script>
-    const ctx = document.getElementById('confidenceChart').getContext('2d');
-    const chart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: [
-                {% for entry in feed %}
-                    "{{ entry.time }}"{% if not loop.last %}, {% endif %}
-                {% endfor %}
-            ],
-            datasets: [{
-                label: 'Prediction Confidence (%)',
-                data: [
+
+    <h3>Confidence Over Time</h3>
+    <canvas id="confidenceChart"></canvas>
+
+    <script>
+        const ctx = document.getElementById('confidenceChart').getContext('2d');
+        const chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [
                     {% for entry in feed %}
-                        {{ entry.confidence | round(1) }}{% if not loop.last %}, {% endif %}
+                        "{{ entry.time }}"{% if not loop.last %}, {% endif %}
                     {% endfor %}
                 ],
-                borderColor: 'blue',
-                tension: 0.2,
-                fill: false
-            }]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    max: 100,
-                    title: {
-                        display: true,
-                        text: 'Confidence (%)'
-                    }
-                },
-                x: {
-                    title: {
-                        display: true,
-                        text: 'Time'
-                    }
-                }
+                datasets: [{
+                    label: 'Prediction Confidence (%)',
+                    data: [
+                        {% for entry in feed %}
+                            {{ (entry.confidence * 100) | round(1) }}{% if not loop.last %}, {% endif %}
+                        {% endfor %}
+                    ],
+                    borderColor: 'blue',
+                    tension: 0.2,
+                    fill: false
+                }]
             },
-            plugins: {
-                legend: {
-                    display: true,
-                    position: 'top'
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        title: {
+                            display: true,
+                            text: 'Confidence (%)'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Time'
+                        }
+                    }
                 },
-                title: {
-                    display: true,
-                    text: 'Confidence Over Time'
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    },
+                    title: {
+                        display: true,
+                        text: 'Confidence Over Time'
+                    }
                 }
             }
-        }
-    });
-</script>
+        });
+    </script>
+</body>
 </html>
